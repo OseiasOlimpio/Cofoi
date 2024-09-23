@@ -1,14 +1,16 @@
+// Importa a biblioteca WebSocket
 const WebSocket = require('ws');
 
+// Cria um servidor WebSocket na porta 5000
 const server = new WebSocket.Server({ port: 5000 });
 
 server.on('connection', (socket) => {
-  console.log('A user connected');
+  console.log('Um usuário se conectou');
 
   socket.on('message', (message) => {
-    console.log(`Received: ${message}`);
-    
-    // Broadcast the message to all clients
+    console.log(`Recebido: ${message}`);
+
+    // Envia a mensagem para todos os clientes conectados
     server.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(message);
@@ -17,8 +19,9 @@ server.on('connection', (socket) => {
   });
 
   socket.on('close', () => {
-    console.log('A user disconnected');
+    console.log('Um usuário se desconectou');
   });
 });
 
-console.log('WebSocket server is running on ws://localhost:5000');
+// Mensagem no console indicando que o servidor está rodando
+console.log('Servidor WebSocket está rodando em ws://localhost:5000');
