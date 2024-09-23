@@ -15,48 +15,47 @@ const colors = [
   "darkgoldenrod",
   "blue",
   "cornflowerblue",
-  "darkhakki",
+  "darkkhaki",
   "hotpink",
   "gold"
 ];
 
-//variavel de dados do usuario
+// variavel de dados do usuario
 const user = { id: "", name: "", color: "" };
 
 let websocket;
 
+// função para criar elementos de mensagem do usuário
 const createMessageSelfElement = (content) => {
-  const div = document.createElement("div")
+  const div = document.createElement("div");
+  div.classList.add("message--self");
+  div.innerHTML = content;
+  return div;
+};
 
-  div.classList.add("message--self")
-  div.innerHTML = content
-
-  return div
-}
-
+// função para criar elementos de mensagem de outros usuários
 const createMessageOtherElement = (content, sender, senderColor) => {
-  const div = document.createElement("div")
-  const span = document.createElement("span")
+  const div = document.createElement("div");
+  const span = document.createElement("span");
 
-  div.classList.add("message--other")
-  span.classList.add("message--sender")
-  span.style.color = senderColor
+  div.classList.add("message--other");
+  span.classList.add("message--sender");
+  span.style.color = senderColor;
 
+  span.innerHTML = sender;
+  div.innerHTML += content;
+  div.appendChild(span);
 
-  div.appendChild(span)
+  return div;
+};
 
-  span.innerHTML = sender
-  div.innerHTML += content
-
-  return div
-}
-
+// função para rolar a tela para baixo
 const scrollScreen = () => {
   window.scrollTo({
     top: document.body.scrollHeight,
-    behavior: "smooth"}
-  )
-}
+    behavior: "smooth"
+  });
+};
 
 // pega cor aleatória do objeto acima
 const getRandomColor = () => {
@@ -64,13 +63,15 @@ const getRandomColor = () => {
   return colors[randomIndex];
 };
 
+// processa as mensagens recebidas do servidor
 const processMessage = ({ data }) => {
-  const { userId, userName, userColor, content } = JSON.parse(data)
-  const message = userId == user.id ? createMessageSelfElement(content) : createMessageOtherElement(content, userName, userColor)
+  const { userId, userName, userColor, content } = JSON.parse(data);
+  const message = userId === user.id
+    ? createMessageSelfElement(content)
+    : createMessageOtherElement(content, userName, userColor);
 
-  chatMessages.appendChild(message)
-
-  scrollScreen()
+  chatMessages.appendChild(message);
+  scrollScreen();
 };
 
 // altera os dados do usuario conforme inserido no input
@@ -84,46 +85,26 @@ const handleLogin = (event) => {
   login.style.display = "none";
   chat.style.display = "flex";
 
-  const connectWebSocket = () => {
-  websocket = new WebSocket("ws://localhost:3000");
-
-  websocket.onopen = () => {
-    console.log("WebSocket connection established.");
-  };
-
-  websocket.onclose = () => {
-    console.log("WebSocket connection closed. Reconnecting...");
-    setTimeout(connectWebSocket, 3000); // Tenta reconectar após 3 segundos
-  };
-
-  websocket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
+  // Conectar ao WebSocket do servidor
+  websocket = new WebSocket("ws://localhost:5000");
 
   websocket.onmessage = processMessage;
 };
 
-// Chamar a função para conectar ao WebSocket
-connectWebSocket();
-};
-
-
-
+// função para enviar mensagens
 const sendMessage = (event) => {
-  event.preventDefault()
+  event.preventDefault();
   const message = {
     userId: user.id,
     userName: user.name,
     userColor: user.color,
     content: chatInput.value
-  }
+  };
 
-  websocket.send(JSON.stringify(message))
+  websocket.send(JSON.stringify(message));
+  chatInput.value = ""; // Limpa o campo de entrada
+};
 
-  chatInput.value = " "
-}
-
-
-
+// adiciona ouvintes de eventos
 loginForm.addEventListener("submit", handleLogin);
 chatForm.addEventListener("submit", sendMessage);
