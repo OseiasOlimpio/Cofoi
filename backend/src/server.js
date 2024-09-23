@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 
 //Configuração dp servidor
 dotenv.config();
-const wss = new WebSocketServer({ port: process.env.PORT || 5000 });
+const wss = new WebSocketServer({ port: process.env.PORT = 3000 });
 
 //Tratamento da conexão
 wss.on("connection", ws => {
