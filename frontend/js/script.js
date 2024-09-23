@@ -85,7 +85,9 @@ const handleLogin = (event) => {
   chat.style.display = "flex";
 
   websocket = new WebSocket("ws://localhost:5000");
-
+  websocket.onerror = (error) => {
+  console.error("WebSocket error:", error);
+};
   websocket.onmessage = processMessage
 
 };
