@@ -84,7 +84,7 @@ const handleLogin = (event) => {
   login.style.display = "none";
   chat.style.display = "flex";
 
-  websocket = new WebSocket("ws://localhost:5000");
+  websocket = new WebSocket("wss://localhost:5000");
   websocket.onerror = (error) => {
   console.error("WebSocket error:", error);
 };
