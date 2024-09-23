@@ -84,12 +84,27 @@ const handleLogin = (event) => {
   login.style.display = "none";
   chat.style.display = "flex";
 
-  websocket = new WebSocket("wss://localhost:5000");
-  websocket.onerror = (error) => {
-  console.error("WebSocket error:", error);
-};
-  websocket.onmessage = processMessage
+  const connectWebSocket = () => {
+  websocket = new WebSocket("ws://localhost:5000");
 
+  websocket.onopen = () => {
+    console.log("WebSocket connection established.");
+  };
+
+  websocket.onclose = () => {
+    console.log("WebSocket connection closed. Reconnecting...");
+    setTimeout(connectWebSocket, 3000); // Tenta reconectar após 3 segundos
+  };
+
+  websocket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  websocket.onmessage = processMessage;
+};
+
+// Chamar a função para conectar ao WebSocket
+connectWebSocket();
 };
 
 
