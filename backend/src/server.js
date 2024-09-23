@@ -14,3 +14,5 @@ wss.on("connection", ws => {
   });
   console.log("client connected")
 });
+
+node server.js
