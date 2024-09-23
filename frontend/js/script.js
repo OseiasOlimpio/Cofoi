@@ -85,7 +85,7 @@ const handleLogin = (event) => {
   chat.style.display = "flex";
 
   const connectWebSocket = () => {
-  websocket = new WebSocket("ws://localhost:5000");
+  websocket = new WebSocket("ws://localhost:3000");
 
   websocket.onopen = () => {
     console.log("WebSocket connection established.");
