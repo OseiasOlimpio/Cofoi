@@ -74,7 +74,7 @@ const processMessage = ({ data }) => {
   scrollScreen();
 };
 
-// altera os dados do usuario conforme inserido no input
+// Lida com o login do usuário
 const handleLogin = (event) => {
   event.preventDefault();
 
@@ -85,13 +85,13 @@ const handleLogin = (event) => {
   login.style.display = "none";
   chat.style.display = "flex";
 
-  // Conectar ao WebSocket do servidor
+  // Conecta ao WebSocket do servidor
   websocket = new WebSocket("ws://localhost:5000");
 
   websocket.onmessage = processMessage;
 };
 
-// função para enviar mensagens
+// Envia mensagens para o servidor
 const sendMessage = (event) => {
   event.preventDefault();
   const message = {
@@ -105,6 +105,6 @@ const sendMessage = (event) => {
   chatInput.value = ""; // Limpa o campo de entrada
 };
 
-// adiciona ouvintes de eventos
+// Adiciona ouvintes de eventos
 loginForm.addEventListener("submit", handleLogin);
 chatForm.addEventListener("submit", sendMessage);
