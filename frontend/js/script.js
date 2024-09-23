@@ -84,7 +84,7 @@ const handleLogin = (event) => {
   login.style.display = "none";
   chat.style.display = "flex";
 
-  websocket = new WebSocket("ws://localhost:3000");
+  websocket = new WebSocket("ws://localhost:5000");
 
   websocket.onmessage = processMessage
 
